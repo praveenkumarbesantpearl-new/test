@@ -1,13 +1,8 @@
-ttt
-gsfsfdf
-U
-HK
-M
-K
-praveen
-joy
-fun
-run
-jun
-gittest
-cicd
+---
+ - hosts: localhost
+   become: yes
+   tasks:
+     - name: check
+       shell:
+         "uptime"
+       register: upt
