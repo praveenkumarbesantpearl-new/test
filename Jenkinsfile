@@ -20,7 +20,7 @@ pipeline{
         }
         stage("test3"){
             when{
-                anyof{
+                anyOf{
                     changeset "uuu"
                     changeset "ttt"
                 }
