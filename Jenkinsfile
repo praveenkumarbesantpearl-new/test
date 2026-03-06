@@ -19,7 +19,8 @@ pipeline{
                 echo "prd is sucess"
             }
         }
-        post{
+    }
+            post{
             always{
                 echo "need to ceck build is sucess or not"
             }
@@ -30,5 +31,4 @@ pipeline{
                 echo "Build $BUILD_NUMBER IS SUCESS"
             }
         }
-    }
 }
