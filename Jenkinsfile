@@ -4,7 +4,7 @@ pipeline{
         stage("test"){
             steps{
                 sh("uname")
-                echo "test is sucess"
+                echo "tests is sucess"
             }
         }
         stage("dev"){
