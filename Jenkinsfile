@@ -3,11 +3,15 @@ pipeline{
     stages{
         stage("test"){
             when{
-                changeset "tt"
+                not{
+                    changeset "tt"
+                }
+                
             }
             steps{
                 sh("uname")
-                echo "test is sucess"
+                echo "buuld shoud fail"
+                error("buod should fail")
             }
         }
         stage("dev"){
