@@ -22,7 +22,7 @@ pipeline{
         failure{
             echo "Build $BUILD_NUMBER is failed"
         }
-        sucess{
+        success{
             echo "Build $BUILD_NUMBER IS SUCCESS"
             sh("uname -r >/tmp/kern.txt")
         }
