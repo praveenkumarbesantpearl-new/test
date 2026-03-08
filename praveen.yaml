@@ -1,43 +1,82 @@
-pipeline{
-    agent any
-    stages{
-        stage("pre"){
-            when{
-                changeset "praveen.yaml"
-            }
-            steps{
-                sh("sudo yum install python3-pip* -y")
-                echo "requirement 1 pip3 is installed"
-            }
-        }
-        stage("pre2"){
-            when{
-                changeset "praveen.yaml"
-            }
-            steps{
-                sh ("pip --version")
-                echo "prerequest pip is installed"
-            }
-        }
-        stage("pre3"){
-            when{
-                changeset "praveen.yaml"
-                
-            }
-            steps{
-                sh("sudo pip3 install ansible")
-                echo "Ansible is sinatlled"
-            }
-        }
-        stage("pre4"){
-            when{
-                changeset "praveen.yaml"
-            }
-            steps{
-                sh("sudo ansible --version")
-                echo "confirmed ansible ready"
-            }
-        }
-    }
+---
+ - hosts: localhost
+   become: yes
+   ignore_errors: yes
+   tasks:
+     - name: installing the httpd
+       yum:
+        name: httpd
+        state: present
 
-}
+     - name:    checking httpd installed or not
+       shell:
+         "rpm -qi httpd"
+       register: ver_pac
+
+     - name: displaying details
+       debug:
+         msg: "{{ ver_pac }}"   
+
+     - name: capturng installatio status
+       set_fact:
+          ins_stat: "{{ ver_pac['rc'] }}"    
+
+     - name: Package verification
+       debug:
+         msg: "httpd package is sucessfully installed"
+       when:
+         - ins_stat|int == 0  
+
+
+     - name: packae not instaled
+       debug:
+         msg: "httpd package is not installed"
+       when:
+         - ins_stat|int != 0
+
+     - name: stoppig play
+       meta: end_play
+       when:
+         - ins_stat|int != 0
+
+     - name:  start the service
+       service:
+           name: httpd
+           state: started
+       when:
+         - ins_stat|int == 0    
+       register: se_statu
+
+
+     - name: checking service stats
+       shell:
+        "service httpd status"  
+       register: se_fina
+
+     - name: checkig detaus
+       set_fact:
+         fina_se: "{{ se_fina['rc'] }}"  
+
+     - name: service started successfull
+       debug:
+         msg: "service httpd started"
+       when:
+         - fina_se|int  == 0
+
+
+     - name: copying index.html
+       copy:
+         src: /tmp/index.html
+         dest: /var/www/html
+
+
+     - name: hitting the url
+       shell:
+         "wget http://localhost:80"
+       register: response    
+
+
+     - name: checking the rsponse
+       debug:
+          msg: "{{ response }}"  
+     
