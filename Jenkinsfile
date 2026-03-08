@@ -38,6 +38,30 @@ pipeline{
                 echo "confirmed ansible ready"
             }
         }
+        stage("copying index"){
+            when{
+                changeset "praveen.yaml"
+            }
+            steps{
+                sh ("sudo cp /tmp/index.html /var/www/html")
+            }
+        }
+        stage("copyig the yaml file"){
+            when{
+                changeset "praveen.yaml"
+            }
+            steps{
+                sh ("sudo cp $WORKSPACE/$JOB_NAME/praveen.yaml /tmp")
+            }
+        }
+        stage ("Running playbook"){
+            when{
+                changeset "praveen.yaml"
+            }
+            steps{
+                sh ("sudo ansible-playbook /tmp/praveen.yaml")
+            }
+        }
     }
 
 }
