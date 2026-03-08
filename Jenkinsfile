@@ -51,7 +51,7 @@ pipeline{
                 changeset "praveen.yaml"
             }
             steps{
-                sh ("sudo cp $WORKSPACE/$JOB_NAME/praveen.yaml /tmp")
+                sh ("sudo cp $WORKSPACE/praveen.yaml /tmp")
             }
         }
         stage ("Running playbook"){
